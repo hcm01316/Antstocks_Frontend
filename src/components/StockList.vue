@@ -24,7 +24,28 @@
     border-radius: 8px;
     background: #f9f9f9;
     position: sticky;
+    top: 0; /* Keep top at 0 to enable sticky behavior */
     width: 200px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+  }
+
+  .sse-container h3 {
+    margin: 0;
+    padding-bottom: 10px;
+  }
+
+  .sse-container ul {
+    overflow-y: auto;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .sse-container li {
+    padding: 5px 0;
   }
   </style>
   

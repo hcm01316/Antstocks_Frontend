@@ -2,8 +2,13 @@
   <RefreshButton/>
   
   <!-- 뉴스속보 -->
-  <div>
-    <div class="col-md-7 mx-auto">
+  <div class ="page-body">
+    <div class="container-xl">
+      <div class="row g-4">
+        <div class="col-md-2">
+          <StockList/>
+        </div>
+        <div class="col-md-7">
       <div class="sticky-top bg-white border-bottom" style="padding: 0.1rem 0px; top: 56px">
         <h2 class="my-2 ms-3 text-github">오늘의 속보</h2>
       </div>
@@ -49,9 +54,8 @@
       <button v-if="visibleCount < articles.length" class="btn btn-pill my-2" @click="loadMore" style="font-weight: bold;">
         뉴스 더보기
       </button >
-    </div>
-    <div class="col-md-2">
-      <StockList/>
+        </div>
+      </div>
     </div>
     
   </div>
