@@ -1,4 +1,6 @@
 <template>
+  <RefreshButton/>
+  
   <!-- 뉴스속보 -->
   <div>
     <div class="col-md-7 mx-auto">
@@ -47,16 +49,33 @@
       <button v-if="visibleCount < articles.length" class="btn btn-pill my-2" @click="loadMore" style="font-weight: bold;">
         뉴스 더보기
       </button >
-
     </div>
+    <div class="col-md-2">
+      <StockList/>
+    </div>
+    
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { useArticlesStore } from "@/stores/articles";
-import { IconHome } from '@tabler/icons-vue';
+import StockList from "../components/StockList.vue"; // StockList 컴포넌트 import
+import RefreshButton from "../components/RefreshButton.vue"; // RefreshButton 컴포넌트 import
+import { useSseStore } from "@/stores/sseStore";
+const sseStore = useSseStore();
+
+
+onMounted(() => {
+  console.log("✅ SSE 연결 시도 중...");
+  sseStore.connectSSE();
+});
+
+onUnmounted(() => {
+  console.log("❌ SSE 연결 해제");
+  sseStore.disconnectSSE();
+});
 
 interface Article {
   id: number;
@@ -104,21 +123,21 @@ const stockList = (stocks: string): string[] => {
 };
 
 onMounted(() => {
-  // axios
-  //   .get<Article[]>('http://localhost:8081/api/allArticles', {
-  //     headers: {
-  //       'X-CSRF-TOKEN': getCsrfToken(),
-  //     },
-  //   })
-  //   .then((response) => {
-  //     console.log("Response: ", response.data);
-  //     articles.value = response.data;
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error occurred: ", error);
-  //   });
-  articles.value = useArticlesStore().articles;
-  console.log(articles);
+  axios
+    .get<Article[]>('http://localhost:8081/api/allArticles', {
+      headers: {
+        'X-CSRF-TOKEN': getCsrfToken(),
+      },
+    })
+    .then((response) => {
+      console.log("Response: ", response.data);
+      articles.value = response.data;
+    })
+    .catch((error) => {
+      console.error("Error occurred: ", error);
+    });
+  // articles.value = useArticlesStore().articles;
+  // console.log(articles);
 });
 </script>
 
@@ -133,4 +152,5 @@ onMounted(() => {
   line-height: 1.5em; /* 줄 높이 */
   white-space: normal;
 }
+
 </style>
