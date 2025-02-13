@@ -17,16 +17,35 @@ export const useSseStore = defineStore("sse", () => {
 
   // 🔹 2️⃣ 상위 종목 리스트 업데이트 + LocalStorage 저장
   const updateStocks = (data: { [key: string]: number }[]) => {
+    const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD 형식
+  
     topStocks.value = data.map(stock => {
       const [key, value] = Object.entries(stock)[0];
       return { key, value: Number(value) };
     });
-
-    localStorage.setItem("topStocks", JSON.stringify(topStocks.value)); // 🔥 LocalStorage 저장
+  
+    // LocalStorage에 데이터 + 오늘 날짜 저장
+    localStorage.setItem("topStocks", JSON.stringify({ date: today, stocks: topStocks.value }));
+  };
+  
+  const checkAndLoadStocks = () => {
+    const storedData = localStorage.getItem("topStocks");
+  
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      const today = new Date().toISOString().split("T")[0];
+  
+      if (parsedData.date === today) {
+        topStocks.value = parsedData.stocks;
+      } else {
+        localStorage.removeItem("topStocks"); // 🔥 날짜가 바뀌었으면 초기화
+      }
+    }
   };
 
   // SSE 연결 함수
   const connectSSE = () => {
+    checkAndLoadStocks;
     if (!eventSource) {
       eventSource = new EventSource("http://localhost:8081/sse/subscribe", {
         withCredentials: true,

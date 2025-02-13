@@ -1,6 +1,7 @@
 <template>
-  <RefreshButton/>
-  
+  <div class="refresh-container">
+    <RefreshButton/>
+  </div>
   <!-- 뉴스속보 -->
   <div class ="page-body">
     <div class="container-xl">
@@ -9,7 +10,7 @@
           <StockList/>
         </div>
         <div class="col-md-7">
-      <div class="sticky-top bg-white border-bottom" style="padding: 0.1rem 0px; top: 56px">
+      <div class="sticky-top bg-white border-bottom" style="padding: 0.1rem 0px; top: 56px; z-index : 1000;">
         <h2 class="my-2 ms-3 text-github">오늘의 속보</h2>
       </div>
       <div class="row row-cards">
@@ -75,6 +76,7 @@ onMounted(() => {
   console.log("✅ SSE 연결 시도 중...");
   sseStore.connectSSE();
 });
+
 
 onUnmounted(() => {
   console.log("❌ SSE 연결 해제");
@@ -155,6 +157,13 @@ onMounted(() => {
   max-height: 5em; /* 줄 높이 * 최대 줄 수 */
   line-height: 1.5em; /* 줄 높이 */
   white-space: normal;
+}
+
+.refresh-container {
+  position: fixed; /* 🔥 항상 화면에 고정 */
+  top: 50px; /* 상단 여백 */
+  right: 50%; /* 오른쪽 여백 */
+  z-index: 1001; /* 다른 요소 위로 올리기 */
 }
 
 </style>
