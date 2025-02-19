@@ -3,60 +3,70 @@
     <RefreshButton/>
   </div>
   <!-- 뉴스속보 -->
-  <div class ="page-body">
+  <div class ="page-body mt-0">
     <div class="container-xl">
       <div class="row g-4">
         <div class="col-md-2">
           <StockList/>
         </div>
         <div class="col-md-7">
-      <div class="sticky-top bg-white border-bottom" style="padding: 0.1rem 0px; top: 56px; z-index : 1000;">
-        <h2 class="my-2 ms-3 text-github">오늘의 속보</h2>
-      </div>
-      <div class="row row-cards">
-        <div class="space-y-0">
-          <div class="card border-0" v-for="article in visibleArticles" :key="article.id">
-            <div class="row g-0">
-              <div class="col-auto">
-                <div class="card-body">
-                  <p class="badge mt-1" :class="article.score >= 9 ? 'bg-orange-lt' : 'bg-gray-500'"><span>{{ formatDate(article.time) }}</span></p>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card-body ps-0">
-                  <div class="row">
-                    <div class="col">
-                      <h3 class="mb-2" :class="{ 'text-orange': article.score >= 9 }">{{ article.title }}</h3>
-                      <p class="lh-lg text-truncate-multi">
-                        <template v-for="(part, index) in formattedText(article.summary)" :key="index">
-                          <span v-if="part.highlight" class="text-google">{{ part.text }}</span>
-                          <span v-else class="text-github">{{ part.text }}</span>
-                        </template>
-                      </p>
+          <div class="sticky-top bg-indigo-lt border-bottom" style="padding: 0.1rem 0px; top: 56px; z-index : 1000;">
+            <h2 class="my-2 ms-3 text-github fs-3">{{ today }} 속보</h2>
+          </div>
+          <div class="row row-cards">
+            <div class="space-y-0">
+              <div class="card border-0" v-for="article in visibleArticles" :key="article.id">
+                <div class="row g-0">
+                  <div class="col-auto">
+                    <div class="card-body">
+                      <p class="badge mt-1" :class="article.score == 9 ? 'bg-orange-lt' : 'bg-gray-500'"><span>{{ formatDate(article.time) }}</span></p>
+                    </div>
+                    <div class="d-flex" style="height: 7rem;">
+                      <div class="vr mx-auto"></div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-md">
-                      <div class="list-inline list-inline-dots mb-0 text-muted d-sm-block d-none">
-                        <span v-for="(stock, index) in stockList(article.stocks)" :key="index" class="badge badge-outline text-github me-1">
-                          {{ stock }}
-                        </span>
+                  <div class="col">
+                    <div class="card-body ps-0">
+                      <div class="row">
+                        <div class="col">
+                          <h3 class="mb-2" :class="{ 'text-orange': article.score == 9 }">{{ article.title }}</h3>
+                          <p class="lh-lg fs-4"> <!-- text-truncate-multi -->
+                            <template v-for="(part, index) in formattedText(article.summary)" :key="index">
+                              <span v-if="part.highlight" class="text-google">{{ part.text }}</span>
+                              <span v-else class="text-github">{{ part.text }}</span>
+                            </template>
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div class="col-md-auto">
+                      <div class="row">
+                        <div class="col-md">
+                          <div class="list-inline list-inline-dots mb-0 text-muted d-sm-block d-none">
+                            <span v-for="(stock, index) in stockList(article.stocks)" :key="index" class="badge badge-outline text-github me-1">
+                              {{ stock }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-md-auto">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          <div class="container text-center px-0">
+            <button v-if="visibleCount < articles.length" class="btn btn-pill my-3 fs-3 fw-semibold" @click="loadMore" style="width: 100%;">
+              뉴스 더보기
+            </button>
+          </div>
+
         </div>
+
+
       </div>
-      <button v-if="visibleCount < articles.length" class="btn btn-pill my-2" @click="loadMore" style="font-weight: bold;">
-        뉴스 더보기
-      </button >
-        </div>
-      </div>
+
     </div>
     
   </div>
@@ -95,6 +105,14 @@ const articles = ref<Article[]>([]);
 const visibleCount = ref<number>(10);
 
 const visibleArticles = computed<Article[]>(() => articles.value.slice(0, visibleCount.value));
+const today = ref<string>(
+  new Intl.DateTimeFormat("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  }).format(new Date())
+);
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -103,7 +121,7 @@ const formatDate = (dateString: string): string => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   // return `${month}월 ${day}일 ${hours}시 ${minutes.toString().padStart(2, "0")}분`;
-  return `${hours} : ${minutes.toString().padStart(2, "0")}`;
+  return `${hours.toString().padStart(2, "0")} : ${minutes.toString().padStart(2, "0")}`;
 };
 
 const getCsrfToken = (): string => {
@@ -145,6 +163,7 @@ onMounted(() => {
   // articles.value = useArticlesStore().articles;
   // console.log(articles);
 });
+
 </script>
 
 <style scoped>
