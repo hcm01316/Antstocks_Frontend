@@ -99,6 +99,7 @@ interface Article {
   summary: string;
   time: string;
   stocks: string;
+  score: number;
 }
 
 const articles = ref<Article[]>([]);
@@ -133,10 +134,10 @@ const loadMore = (): void => {
   visibleCount.value += 10;
 };
 
-const formattedText = (text) => {
+const formattedText = (text: string) => {
   const regex = /(<[^>]+>)/g;  // '<'와 '>' 사이에 있는 내용을 캡쳐
   const parts = text.split(regex);
-  return parts.map((part) => ({
+  return parts.map((part: string) => ({
     text: part.replace(/<|>/g, ""),  // < > 제거
     highlight: part.startsWith("<") && part.endsWith(">"),
   }));

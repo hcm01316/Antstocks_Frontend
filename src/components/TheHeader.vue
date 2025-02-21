@@ -41,7 +41,7 @@
             v-for="(news, index) in breakingNews" :key="index">
             <component
               :is="iconComponents[index+1]"
-              :stroke="0.5"
+              :stroke="'0.5'"
               class="me-2 text-bitbucket"
               :size="20"
             /> {{ news.title }}
@@ -61,6 +61,7 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import { Autoplay } from "swiper/modules"; /* Swiper 모듈 추가 */
 import "swiper/css"; /* Swiper CSS 추가 */
 import "swiper/css/autoplay"; /* 자동 재생 스타일 추가 */
+import type { Icon } from '@tabler/icons-vue';
 import { IconSquareRoundedNumber1Filled, IconSquareRoundedNumber2Filled, IconSquareRoundedNumber3Filled, IconSquareRoundedNumber4Filled, IconSquareRoundedNumber5Filled } from '@tabler/icons-vue';
 
 interface news {
@@ -79,7 +80,7 @@ onMounted(() => {
   breakingNewsStore.fetchBreakingNews()
 })
 
-const iconComponents = {
+const iconComponents: Record<number, Icon> = {
   1: IconSquareRoundedNumber1Filled,
   2: IconSquareRoundedNumber2Filled,
   3: IconSquareRoundedNumber3Filled,
