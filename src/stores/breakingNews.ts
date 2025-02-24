@@ -33,7 +33,7 @@ export const useBreakingNewsStore = defineStore('breakingNews', () => {
     //         "originLink": "https://finance.yahoo.com/news/deepseek-trojan-horse-kevin-oleary-203017747.html"
     //     },
     // ]
-      const response = await axios.get<BreakingNewsItem[]>('http://localhost:8081/api/breakingNews')
+      const response = await axios.get<BreakingNewsItem[]>("/api/breakingNews")
       breakingNews.value = response.data // API 응답 데이터를 상태에 저장
     } catch (err) {
       error.value = err instanceof Error ? err.message : '알 수 없는 오류 발생'

@@ -47,7 +47,7 @@ export const useSseStore = defineStore("sse", () => {
   const connectSSE = () => {
     checkAndLoadStocks;
     if (!eventSource) {
-      eventSource = new EventSource("http://localhost:8081/sse/subscribe", {
+      eventSource = new EventSource("/sse/subscribe", {
         withCredentials: true,
       });
 

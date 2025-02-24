@@ -76,11 +76,10 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { useArticlesStore } from "@/stores/articles";
-import StockList from "../components/StockList.vue"; // StockList 컴포넌트 import
-import RefreshButton from "../components/RefreshButton.vue"; // RefreshButton 컴포넌트 import
+import StockList from "@/components/StockList.vue"; // StockList 컴포넌트 import
+import RefreshButton from "@/components/ReFreshButton.vue";; // RefreshButton 컴포넌트 import
 import { useSseStore } from "@/stores/sseStore";
 const sseStore = useSseStore();
-
 
 onMounted(() => {
   console.log("✅ SSE 연결 시도 중...");
@@ -149,7 +148,7 @@ const stockList = (stocks: string): string[] => {
 
 onMounted(() => {
   axios
-    .get<Article[]>('http://localhost:8081/api/allArticles', {
+    .get<Article[]>("/api/allArticles", {
       headers: {
         'X-CSRF-TOKEN': getCsrfToken(),
       },
