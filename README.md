@@ -70,8 +70,6 @@
   * Top10StockMentions API 개발
   * SSE를 이용한 알림 개발
 
-* 배포
-  * Docker를 활용한 AWS EC2 컨테이너 배포
 
 # 페이지 기능
 ### 속보
